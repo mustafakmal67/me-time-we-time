@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Pakistan Tour Packages | Me Time We Time</title>
+  <meta name="description" content="Choose from premium Pakistan tour packages with Me Time We Time. Custom family tours, group departures, honeymoon trips, and adventure expeditions across Northern Pakistan, Gilgit-Baltistan, and Azad Kashmir.">
+  <meta property="og:title" content="Pakistan Tour Packages | Me Time We Time">
+  <meta property="og:description" content="Embark on an unforgettable journey. Premium and custom tour packages to Hunza, Skardu, Swat, Fairy Meadows, Kumrat, and Azad Kashmir.">
+  <meta property="og:image" content="images/tour-neelum.jpg">
+  <meta property="og:type" content="website">
+  
+  <!-- Phosphor Icons -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
+  
+  <!-- Nomadic Horizon Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    /* Full-screen Cinematic Stage */
+    .tours-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      background: #080b09;
+    }
+    
+    /* Background Canvas Layers (Hardware Accelerated Crossfade) */
+    .showcase-bg-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      transform: scale(1.03);
+      z-index: 1;
+      opacity: 0;
+    }
+    
+    .showcase-bg-canvas.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .showcase-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(15, 23, 18, 0.85) 0%, rgba(15, 23, 18, 0.4) 60%, rgba(15, 23, 18, 0.6) 100%);
+      z-index: 2;
+    }
+    
+    /* Left Content Panel (Bottom-Left Alignment) */
+    .showcase-content {
+      position: relative;
+      z-index: 10;
+      color: #ffffff;
+      padding-left: 8%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      transform: translateY(0);
+      opacity: 1;
+      will-change: transform, opacity;
+    }
+    
+    .showcase-content.fade-out {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    
+    .showcase-location {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--sunset-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+    
+    .showcase-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin: 0;
+      text-transform: uppercase;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      letter-spacing: -0.02em;
+      /* Stable Height to prevent layout shifts */
+      min-height: 142px;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .showcase-meta {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    
+    .showcase-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .showcase-desc {
+      font-size: 14.5px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.75;
+      margin-bottom: 16px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      /* Stable Height to prevent layout shifts */
+      min-height: 100px;
+    }
+    
+    .showcase-btn-group {
+      display: flex;
+      gap: 16px;
+    }
+    
+    /* Right Carousel Panel with fade-out masks */
+    .showcase-carousel-panel {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-38%);
+      left: 46%;
+      right: 0;
+      z-index: 10;
+      overflow: hidden;
+      pointer-events: none;
+      padding-left: 20px;
+      padding-right: 20px;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 85%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 85%, transparent 100%);
+    }
+    
+    .carousel-track {
+      display: flex;
+      gap: 24px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    
+    .carousel-card {
+      flex: 0 0 200px;
+      height: 300px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                  opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                  filter 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                  box-shadow 0.6s ease,
+                  border-color 0.6s ease;
+      outline: none;
+    }
+    
+    .carousel-card-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    .carousel-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 23, 18, 0.85) 0%, rgba(15, 23, 18, 0.2) 65%, transparent 100%);
+      z-index: 1;
+    }
+    
+    .carousel-card-content {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      color: #ffffff;
+      z-index: 2;
+    }
+    
+    .carousel-card-loc {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--sunset-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: block;
+      margin-bottom: 2px;
+    }
+    
+    .carousel-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin: 0;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Carousel Card Hover State (200-250ms duration matching guideline) */
+    .carousel-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      transition: transform 0.22s cubic-bezier(0.25, 1, 0.5, 1),
+                  box-shadow 0.22s ease,
+                  border-color 0.22s ease;
+    }
+    
+    .carousel-card:hover .carousel-card-img {
+      transform: scale(1.08);
+      transition: transform 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    /* Elegant Card Expanding Transition into Background */
+    .carousel-card.expanding {
+      transform: scale(1.2) translateY(-15px) !important;
+      opacity: 0 !important;
+      filter: blur(8px) !important;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                  opacity 0.6s ease,
+                  filter 0.6s ease !important;
+    }
+    
+    /* Navigation Controls */
+    .showcase-controls {
+      position: absolute;
+      bottom: 8%;
+      left: 46%;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      z-index: 20;
+    }
+    
+    .control-arrow-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    
+    .control-arrow-btn:hover {
+      background: var(--sunset-accent);
+      border-color: var(--sunset-accent);
+      transform: scale(1.08);
+      box-shadow: 0 0 15px rgba(245, 130, 32, 0.4);
+    }
+    
+    /* Big Index Digit Overlay */
+    .showcase-number {
+      position: absolute;
+      bottom: 4%;
+      right: 8%;
+      font-family: 'Poppins', sans-serif;
+      font-size: 150px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.05);
+      line-height: 1;
+      pointer-events: none;
+      z-index: 5;
+      letter-spacing: -0.05em;
+    }
+    
+    /* Responsive Adaptations */
+    @media (max-width: 990px) {
+      .showcase-title {
+        font-size: 48px;
+      }
+      .showcase-carousel-panel {
+        left: 50%;
+      }
+      .showcase-controls {
+        left: 50%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .tours-stage {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 100px;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+      }
+      
+      .showcase-content {
+        padding: 40px 24px 20px 24px;
+        max-width: 100%;
+        width: 100%;
+      }
+      
+      .showcase-title {
+        font-size: 28px;
+        min-height: auto;
+      }
+      
+      .showcase-desc {
+        min-height: auto;
+      }
+      
+      .showcase-carousel-panel {
+        position: relative;
+        transform: none;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        overflow-x: auto;
+        padding: 20px 24px;
+        scrollbar-width: none;
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+      
+      .showcase-carousel-panel::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .carousel-track {
+        gap: 16px;
+      }
+      
+      .carousel-card {
+        flex: 0 0 150px;
+        height: 220px;
+      }
+      
+      .showcase-controls {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        padding: 20px 24px 60px 24px;
+        width: 100%;
+        justify-content: flex-start;
+      }
+      
+      .showcase-number {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BEGIN: Header / TopNavBar -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo"><img src="images/bg-free-logo.png" alt="Me Time We Time Logo"></a>
+      
+      <nav class="nav-menu" id="nav-menu">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link active" href="tours.html">Tours</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="custom-tour.html">Custom Tour</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+      </nav>
+      
+      <div class="header-actions">
+        <a href="custom-tour.html" class="btn btn-secondary btn-sm btn-book">Book Now</a>
+        <button class="nav-toggle" id="nav-toggle"><i class="ph ph-list"></i></button>
+      </div>
+    </div>
+  </header>
+  <!-- END: Header / TopNavBar -->
+
+  <main class="tours-stage">
+    <img id="showcase-bg-active" class="showcase-bg-canvas active" src="images/tour-neelum.jpg" alt="Destination Background">
+    <img id="showcase-bg-temp" class="showcase-bg-canvas" src="" alt="Destination Background Temp">
+    <div class="showcase-bg-overlay"></div>
+    
+    <!-- Left Column content -->
+    <div class="showcase-content" id="showcase-content">
+      <span class="showcase-location" id="showcase-location">📍 Neelum Valley</span>
+      <h1 class="showcase-title" id="showcase-title">Neelum Valley</h1>
+      
+      <div class="showcase-meta">
+        <span class="showcase-meta-item"><i class="ph ph-clock text-sunset-accent"></i> <span id="showcase-duration">5 Days</span></span>
+        <span class="showcase-meta-item"><i class="ph ph-calendar-check text-sunset-accent"></i> <span id="showcase-price">Custom Packages</span></span>
+      </div>
+      
+      <p class="showcase-desc" id="showcase-desc">
+        Explore the stunning Neelum Valley, a majestic corridor of lush forests, towering peaks, and crystal streams in Azad Kashmir.
+      </p>
+      
+      <div class="showcase-btn-group">
+        <a href="custom-tour.html" class="btn btn-secondary btn-lg" id="showcase-book-btn" style="border-radius: var(--radius-full);">Book Now</a>
+        <a href="contact.html?tour=neelum" class="btn btn-outline-white btn-lg" id="showcase-btn" style="border-radius: var(--radius-full);">Discover Location <i class="ph ph-arrow-right"></i></a>
+      </div>
+    </div>
+    
+    <!-- Right Column Carousel -->
+    <div class="showcase-carousel-panel">
+      <div class="carousel-track" id="carousel-track" role="list">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </div>
+    
+    <!-- Controls (Circular Arrows) -->
+    <div class="showcase-controls">
+      <button class="control-arrow-btn" id="scroller-left" aria-label="Previous destination"><i class="ph ph-arrow-left"></i></button>
+      <button class="control-arrow-btn" id="scroller-right" aria-label="Next destination"><i class="ph ph-arrow-right"></i></button>
+    </div>
+    
+    <!-- Slide Index Large Number -->
+    <div class="showcase-number" id="showcase-number">01</div>
+  </main>
+
+  <!-- BEGIN: MainFooter -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand-col">
+          <div class="footer-logo"><img src="images/bg-free-logo.png" alt="Me Time We Time Logo"></div>
+          <p class="footer-desc">Me Time We Time is a trusted travel agency specializing in custom adventure tourism across Northern Pakistan, including Hunza, Skardu, Swat, Fairy Meadows, Naran, and beyond. We focus on creating unforgettable journeys for solo travelers, families, and adventure communities.</p>
+          <div class="social-links">
+            <a class="social-link" href="https://www.facebook.com/metimewetime877" target="_blank"><i class="ph ph-facebook-logo"></i></a>
+            <a class="social-link" href="https://www.instagram.com/metime_wetime" target="_blank"><i class="ph ph-instagram-logo"></i></a>
+            <a class="social-link" href="#"><i class="ph ph-x-logo"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-links-col">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tours.html">All Tours</a></li>
+            <li><a href="gallery.html">Photo Gallery</a></li>
+            <li><a href="custom-tour.html">Custom Tour</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-tours-col">
+          <h4 class="footer-heading">Popular Tours</h4>
+          <ul class="footer-links-list">
+            <li><a href="tours.html">Neelum Valley &amp; Taobat</a></li>
+            <li><a href="tours.html">Skardu Valley By Air</a></li>
+            <li><a href="tours.html">Hunza Valley Experience</a></li>
+            <li><a href="tours.html">Fairy Meadows Adventure</a></li>
+            <li><a href="tours.html">Naran &amp; Kaghan Trip</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-contact-col">
+          <h4 class="footer-heading">Get In Touch</h4>
+          <div class="footer-contact-item">
+            <i class="ph ph-map-pin"></i>
+            <p>Office No. 44-M1, Ashiana Shopping Center, Block D1 Gulberg III, Lahore, 54000, Pakistan</p>
+          </div>
+          <div class="footer-contact-item">
+            <i class="ph ph-phone"></i>
+            <p>+92 312 7600239</p>
+          </div>
+          <div class="footer-contact-item">
+            <i class="ph ph-envelope"></i>
+            <p>hello@metimewetime.com</p>
+          </div>
+          
+          <div class="mt-8">
+            <span class="newsletter-title">Newsletter</span>
+            <form class="newsletter-form">
+              <input class="newsletter-input" placeholder="Your email" type="email" required>
+              <button class="newsletter-btn" type="submit"><i class="ph ph-arrow-right"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2026 Me Time We Time. All Rights Reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- END: MainFooter -->
+
+  <a href="https://wa.me/923127600239?text=Hello%20Me%20Time%20We%20Time%20I%20would%20like%20to%20inquire%20about%20a%20tour" class="whatsapp-floating-btn" target="_blank" rel="noopener noreferrer"><i class="ph ph-whatsapp-logo"></i></a>
+
+  <!-- WebGL Shader Background -->
+  <script src="shader-bg.js"></script>
+
+  <!-- Global scripts -->
+  <script src="main.js"></script>
+
+  <script>
+    // Tour destinations data array (source of truth) - Replaced all pricing globally
+    const DESTINATIONS = [
+      {
+        id: "neelum",
+        name: "Neelum Valley & Taobat Road Trip",
+        location: "📍 Neelum Valley",
+        duration: "5 Days",
+        badge: "Custom Packages",
+        desc: "Explore the stunning Neelum Valley, a majestic corridor of lush forests, towering peaks, and crystal streams in Azad Kashmir. From the cable car ride to Arangkel to the border village of Taobat, this road trip is a journey into paradise.",
+        image: "images/tour-neelum.jpg",
+        detailsUrl: "contact.html?tour=neelum"
+      },
+      {
+        id: "skardu-road",
+        name: "Skardu Valley Road Trip",
+        location: "📍 Skardu Valley",
+        duration: "7 Days",
+        badge: "Private & Group Tours",
+        desc: "Embark on an epic road trip through the Karakoram Range to Skardu. Discover the serene waters of Shangrila, the giant sand dunes of Sarfaranga, and the ancient fortress of Shigar, all framed by some of the highest peaks on Earth.",
+        image: "images/skardu-valley-by-road.jpg",
+        detailsUrl: "contact.html?tour=skardu-road"
+      },
+      {
+        id: "hunza-skardu",
+        name: "Hunza and Skardu Road Trip",
+        location: "📍 Hunza & Skardu",
+        duration: "9 Days",
+        badge: "Tailor-Made Experience",
+        desc: "A grand tour combining two of Pakistan's most legendary valleys. Drive through the breathtaking Babusar Pass, marvel at the turquoise Attabad Lake, and journey into the heart of Baltistan to see Skardu's raw beauty.",
+        image: "images/tour-hunza-skardu.jpg",
+        detailsUrl: "contact.html?tour=hunza-skardu"
+      },
+      {
+        id: "kumrat",
+        name: "Kumrat, Jahaz Banda & Katora Lake",
+        location: "📍 Kumrat Valley",
+        duration: "5 Days",
+        badge: "Available All Year",
+        desc: "Venture deep into the untamed wilderness of Kumrat Valley. Hike through towering pine forests to the alpine meadows of Jahaz Banda, and trek to the crystal-clear waters of the glacier-fed Katora Lake.",
+        image: "images/tour-kumrat.jpg",
+        detailsUrl: "contact.html?tour=kumrat"
+      },
+      {
+        id: "skardu-air",
+        name: "Skardu Valley Expedition (Air)",
+        location: "📍 Skardu",
+        duration: "5 Days",
+        badge: "Contact Us for Details",
+        desc: "A premium, time-efficient expedition to Skardu starting with a scenic flight past Nanga Parbat. Includes high-end accommodations at Shangrila Resort, private transports, and an excursion to the high-altitude plains of Deosai.",
+        image: "images/skardu-valley-by-air.jpg",
+        detailsUrl: "contact.html?tour=skardu-air"
+      },
+      {
+        id: "hunza-air",
+        name: "Hunza Valley Expedition (Air)",
+        location: "📍 Hunza",
+        duration: "5 Days",
+        badge: "Book Your Adventure",
+        desc: "Experience the legendary Hunza Valley in premium style. Skip the long drives with a direct flight to Gilgit, then explore the ancient Forts of Altit and Baltit, sail across Attabad Lake, and watch the sun rise over Rakaposhi.",
+        image: "images/tour-hunza-skardu.jpg",
+        detailsUrl: "contact.html?tour=hunza-air"
+      },
+      {
+        id: "swat",
+        name: "Swat Valley Vacation",
+        location: "📍 Swat Valley",
+        duration: "4 Days",
+        badge: "Private & Group Tours",
+        desc: "A delightful family getaway to the 'Switzerland of the East'. Enjoy comfortable hotel stays, walk through the dense pine trees of Ushu Forest, take a chairlift ride at Malam Jabba, and explore the rushing waters of Kalam.",
+        image: "images/tour-swat.jpg",
+        detailsUrl: "contact.html?tour=swat"
+      },
+      {
+        id: "fairy-meadows",
+        name: "Fairy Meadows & Nanga Parbat",
+        location: "📍 Fairy Meadows",
+        duration: "6 Days",
+        badge: "Tailor-Made Experience",
+        desc: "Trek to the legendary Fairy Meadows, a lush alpine grassland sitting directly under the sheer face of Nanga Parbat (8,126m). Stay in rustic wooden cabins, hike to the base camp, and walk through pristine pine forests.",
+        image: "images/fairy-meadows.jpg",
+        detailsUrl: "contact.html?tour=fairy-meadows"
+      }
+    ];
+
+    let currentIndex = 0;
+    let isTransitioning = false;
+
+    // DOM Elements
+    const bgActive = document.getElementById("showcase-bg-active");
+    const bgTemp = document.getElementById("showcase-bg-temp");
+    const showcaseContent = document.getElementById("showcase-content");
+    const showcaseTitle = document.getElementById("showcase-title");
+    const showcaseLocation = document.getElementById("showcase-location");
+    const showcaseDuration = document.getElementById("showcase-duration");
+    const showcasePrice = document.getElementById("showcase-price");
+    const showcaseDesc = document.getElementById("showcase-desc");
+    const showcaseBtn = document.getElementById("showcase-btn");
+    const showcaseNumber = document.getElementById("showcase-number");
+    const track = document.getElementById("carousel-track");
+    const scrollerLeftBtn = document.getElementById("scroller-left");
+    const scrollerRightBtn = document.getElementById("scroller-right");
+
+    // Initialize Destinations Carousel
+    function initCarousel() {
+      track.innerHTML = "";
+      for (let i = 1; i <= DESTINATIONS.length; i++) {
+        const destIndex = (currentIndex + i) % DESTINATIONS.length;
+        const dest = DESTINATIONS[destIndex];
+        
+        const card = document.createElement("div");
+        card.className = "carousel-card";
+        card.tabIndex = 0;
+        card.role = "listitem";
+        card.setAttribute("aria-label", `View details for ${dest.name}`);
+        card.setAttribute("data-index", destIndex);
+        
+        card.innerHTML = `
+          <img src="${dest.image}" class="carousel-card-img" alt="${dest.name}" loading="lazy">
+          <div class="carousel-card-overlay"></div>
+          <div class="carousel-card-content">
+            <span class="carousel-card-loc">${dest.location}</span>
+            <h4 class="carousel-card-title">${dest.name.split(',')[0]}</h4>
+          </div>
+        `;
+        
+        // Click to slide
+        card.addEventListener("click", () => {
+          if (isTransitioning) return;
+          const clickedIndex = destIndex;
+          let steps = (clickedIndex - currentIndex + DESTINATIONS.length) % DESTINATIONS.length;
+          if (steps > 0) {
+            moveNext();
+          }
+        });
+        
+        // Keypress accessibility
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            const clickedIndex = destIndex;
+            let steps = (clickedIndex - currentIndex + DESTINATIONS.length) % DESTINATIONS.length;
+            if (steps > 0) {
+              moveNext();
+            }
+          }
+        });
+        
+        track.appendChild(card);
+      }
+    }
+
+    // Move next (Slide left)
+    function moveNext() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      
+      const nextIndex = (currentIndex + 1) % DESTINATIONS.length;
+      const nextData = DESTINATIONS[nextIndex];
+      
+      // Expand outgoing card visually into background
+      const firstCard = track.firstElementChild;
+      if (firstCard) {
+        firstCard.classList.add("expanding");
+      }
+      
+      // Preload next image
+      const imgPreload = new Image();
+      imgPreload.src = nextData.image;
+      imgPreload.onload = () => {
+        // Transition track dynamically based on viewport (224px desktop, 166px mobile)
+        const cardWidth = window.innerWidth < 768 ? 150 : 200;
+        const gap = window.innerWidth < 768 ? 16 : 24;
+        const shiftX = -(cardWidth + gap);
+        
+        track.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
+        track.style.transform = `translateX(${shiftX}px)`;
+        
+        // Transition text content (300-500ms duration)
+        showcaseContent.classList.add("fade-out");
+        
+        // Transition Background
+        bgTemp.src = nextData.image;
+        bgTemp.classList.add("active");
+        
+        setTimeout(() => {
+          // Update texts
+          showcaseLocation.textContent = nextData.location;
+          showcaseTitle.textContent = nextData.name.split(',')[0];
+          showcaseDuration.textContent = nextData.duration;
+          showcasePrice.textContent = nextData.badge;
+          showcaseDesc.textContent = nextData.desc;
+          showcaseNumber.textContent = String(nextIndex + 1).padStart(2, '0');
+          showcaseBtn.href = nextData.detailsUrl;
+          
+          showcaseContent.classList.remove("fade-out");
+        }, 250);
+
+        setTimeout(() => {
+          // Remove expanding class before shifting
+          if (firstCard) {
+            firstCard.classList.remove("expanding");
+          }
+          
+          // Move the first card to the end of track DOM
+          track.appendChild(firstCard);
+          
+          // Reset track translate instantly
+          track.style.transition = "none";
+          track.style.transform = "translateX(0)";
+          
+          // Swap backgrounds
+          bgActive.src = nextData.image;
+          bgTemp.classList.remove("active");
+          
+          currentIndex = nextIndex;
+          initCarousel();
+          
+          isTransitioning = false;
+        }, 600);
+      };
+      imgPreload.onerror = () => {
+        if (firstCard) firstCard.classList.remove("expanding");
+        isTransitioning = false;
+      };
+    }
+
+    // Move prev (Slide right)
+    function movePrev() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      
+      const prevIndex = (currentIndex - 1 + DESTINATIONS.length) % DESTINATIONS.length;
+      const prevData = DESTINATIONS[prevIndex];
+      
+      const imgPreload = new Image();
+      imgPreload.src = prevData.image;
+      imgPreload.onload = () => {
+        currentIndex = prevIndex;
+        initCarousel();
+        
+        const cardWidth = window.innerWidth < 768 ? 150 : 200;
+        const gap = window.innerWidth < 768 ? 16 : 24;
+        const shiftX = -(cardWidth + gap);
+        
+        track.style.transition = "none";
+        track.style.transform = `translateX(${shiftX}px)`;
+        
+        const firstCard = track.firstElementChild;
+        if (firstCard) {
+          firstCard.classList.add("expanding");
+        }
+        
+        track.offsetHeight; // force reflow
+        
+        track.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
+        track.style.transform = "translateX(0)";
+        
+        showcaseContent.classList.add("fade-out");
+        bgTemp.src = prevData.image;
+        bgTemp.classList.add("active");
+        
+        setTimeout(() => {
+          if (firstCard) {
+            firstCard.classList.remove("expanding");
+          }
+        }, 50);
+        
+        setTimeout(() => {
+          showcaseLocation.textContent = prevData.location;
+          showcaseTitle.textContent = prevData.name.split(',')[0];
+          showcaseDuration.textContent = prevData.duration;
+          showcasePrice.textContent = prevData.badge;
+          showcaseDesc.textContent = prevData.desc;
+          showcaseNumber.textContent = String(prevIndex + 1).padStart(2, '0');
+          showcaseBtn.href = prevData.detailsUrl;
+          
+          showcaseContent.classList.remove("fade-out");
+        }, 250);
+
+        setTimeout(() => {
+          bgActive.src = prevData.image;
+          bgTemp.classList.remove("active");
+          isTransitioning = false;
+        }, 600);
+      };
+      imgPreload.onerror = () => {
+        isTransitioning = false;
+      };
+    }
+
+    // Touch Swipe Gestures support for mobile
+    let touchstartX = 0;
+    let touchstartY = 0;
+    let touchendX = 0;
+    let touchendY = 0;
+
+    const toursStage = document.querySelector('.tours-stage');
+    if (toursStage) {
+      toursStage.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+        touchstartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      toursStage.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        touchendY = e.changedTouches[0].screenY;
+        handleSwipe();
+      }, { passive: true });
+    }
+
+    function handleSwipe() {
+      const threshold = 50;
+      const diffX = touchendX - touchstartX;
+      const diffY = touchendY - touchstartY;
+      
+      // Ensure horizontal swipe is dominant and exceeds threshold
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > threshold) {
+        if (diffX < 0) {
+          moveNext();
+        } else {
+          movePrev();
+        }
+      }
+    }
+
+    scrollerLeftBtn.addEventListener("click", movePrev);
+    scrollerRightBtn.addEventListener("click", moveNext);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initCarousel();
+      
+      const initial = DESTINATIONS[0];
+      showcaseLocation.textContent = initial.location;
+      showcaseTitle.textContent = initial.name.split(',')[0];
+      showcaseDuration.textContent = initial.duration;
+      showcasePrice.textContent = initial.badge;
+      showcaseDesc.textContent = initial.desc;
+      showcaseNumber.textContent = "01";
+      showcaseBtn.href = initial.detailsUrl;
+    });
+  </script>
+</body>
+</html>
