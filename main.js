@@ -397,10 +397,27 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.01 }); // Set a very low threshold to prevent false-negative pauses on load/minor scrolls
 
     document.querySelectorAll('video').forEach(video => {
       videoObserver.observe(video);
     });
   }
+
+  // Fallback: Autoplay media unlock on first scroll, touch, or click (crucial for mobile autoplay policies)
+  const unlockAutoplay = () => {
+    document.querySelectorAll('video').forEach(video => {
+      if (video.paused && video.autoplay) {
+        video.play().catch(() => {});
+      }
+    });
+    window.removeEventListener('click', unlockAutoplay);
+    window.removeEventListener('touchstart', unlockAutoplay);
+    window.removeEventListener('touchend', unlockAutoplay);
+    window.removeEventListener('scroll', unlockAutoplay);
+  };
+  window.addEventListener('click', unlockAutoplay, { once: true, passive: true });
+  window.addEventListener('touchstart', unlockAutoplay, { once: true, passive: true });
+  window.addEventListener('touchend', unlockAutoplay, { once: true, passive: true });
+  window.addEventListener('scroll', unlockAutoplay, { once: true, passive: true });
 });

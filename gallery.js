@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       activeImages.push(imagePool[i]);
     }
 
-    // Render slots
+    // Render slots (using loading="eager" so they render immediately inside the 3D projection on load)
     for (let i = 0; i < cardCount; i++) {
       const item = activeImages[i];
       const imgSrc = `our gallery/${item.name}`;
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       card.innerHTML = `
         <div class="gallery-image-wrapper">
-          <img class="gallery-img loaded" alt="${item.title}" src="${imgSrc}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; opacity: 1;">
+          <img class="gallery-img loaded" alt="${item.title}" src="${imgSrc}" loading="eager" style="width: 100%; height: 100%; object-fit: cover; opacity: 1;">
         </div>
       `;
       
@@ -447,13 +447,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     lightboxImg.style.opacity = '0.3';
     
     setTimeout(() => {
+      // Set onload handler to fade in smoothly once the image has actually downloaded
+      lightboxImg.onload = () => {
+        lightboxImg.style.opacity = '1';
+        lightboxImg.onload = null; // Clean up handler
+      };
+      
       lightboxImg.src = `our gallery/${item.name}`;
       lightboxImg.alt = item.title;
       lightboxTag.textContent = item.tag;
       lightboxTitle.textContent = item.title;
       lightboxDesc.textContent = item.desc;
       lightboxCounter.textContent = `${currentActiveIndex + 1} / ${activeImages.length}`;
-      lightboxImg.style.opacity = '1';
     }, 150);
   };
 
