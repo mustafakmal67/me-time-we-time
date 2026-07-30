@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const lightboxPrev = document.getElementById('lightbox-prev');
   const lightboxNext = document.getElementById('lightbox-next');
 
-  // Real gallery images metadata (57 items)
+  // Real gallery images metadata (50 items matching actual files in 'our gallery')
   let imagePool = [
     { name: "IMG_0272.JPG.jpeg", title: "Neelum Valley Stream", tag: "Neelum Valley", desc: "Crystal clear water flowing through lush pine valleys." },
     { name: "IMG_0302.JPG.jpeg", title: "Taobat Border Meadows", tag: "Kashmir", desc: "Pristine fields along the Neelum River in Taobat." },
@@ -20,15 +20,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     { name: "IMG_0641.JPG.jpeg", title: "Deosai Wildflowers", tag: "Baltistan", desc: "Golden summer blooms on the high alpine plains." },
     { name: "IMG_0664.JPG.jpeg", title: "Nanga Parbat Camp", tag: "Fairy Meadows", desc: "Tents under the colossal face of the Killer Mountain." },
     { name: "IMG_0967.JPG.jpeg", title: "Kumrat Forest Path", tag: "Kumrat Valley", desc: "Dense pine trees and mossy soil in Dir." },
-    { name: "IMG_0968.JPG.jpeg", title: "Jahaz Banda Meadows", tag: "Kumrat", desc: "High altitude alpine grasslands and rustic huts." },
     { name: "IMG_0980.JPG.jpeg", title: "Katora Lake Trek", tag: "Kumrat Valley", desc: "Glacier-fed turquoise waters high above Jahaz Banda." },
     { name: "IMG_0982.JPG.jpeg", title: "Malam Jabba Slopes", tag: "Swat Valley", desc: "Pine covered peaks and ski resort valley view." },
     { name: "IMG_1243.JPG.jpeg", title: "Attabad Turquoise waters", tag: "Hunza Valley", desc: "Boat cruising on the emerald waters of Attabad." },
-    { name: "IMG_1284.JPG.jpeg", title: "Khunjerab Pass Gate", tag: "Karakoram", desc: "High border post at the junction of Pakistan and China." },
     { name: "IMG_1285.JPG.jpeg", title: "Baltit Fort Majesty", tag: "Hunza", desc: "Ancient 700-year-old fort perched above Karimabad." },
     { name: "IMG_1296.JPG.jpeg", title: "Eagle's Nest Golden Hour", tag: "Hunza Valley", desc: "Panoramic sunset view over the Hunza river valley." },
     { name: "IMG_1387.JPG.jpeg", title: "Shangrila Resort Vista", tag: "Skardu", desc: "Lower Kachura lake framed by red cottages." },
-    { name: "IMG_1388.JPG.jpeg", title: "Sarfaranga Sand Dunes", tag: "Skardu", desc: "High-altitude cold desert dunes at twilight." },
     { name: "IMG_1390.JPG.jpeg", title: "Shigar Fort Residence", tag: "Skardu", desc: "17th-century palace restored as a heritage hotel." },
     { name: "IMG_1930.JPG.jpeg", title: "Ushu River Rapids", tag: "Swat Valley", desc: "Swirling white rapids in Kalam's deep pine forest." },
     { name: "IMG_1932.JPG.jpeg", title: "Mahodand Lake Quiet", tag: "Swat Valley", desc: "Serene mountain waters surrounded by green meadows." },
@@ -40,7 +37,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     { name: "IMG_2323.JPG.jpeg", title: "Lulusar Lake Serenity", tag: "Kaghan", desc: "Deep blue deep mountain reservoir along the highway." },
     { name: "IMG_2515.JPG.jpeg", title: "Arang Kel Village", tag: "Neelum Valley", desc: "Hilltop village accessible via cable car and trek." },
     { name: "IMG_4331.JPG.jpeg", title: "Sharda Temple Ruins", tag: "Kashmir", desc: "Ancient Hindu temple ruins steeped in history." },
-    { name: "IMG_4492.JPG.jpeg", title: "Taobat Forest Stream", tag: "Neelum Valley", desc: "Dense pine trees shadowing the riverbanks." },
     { name: "IMG_4727.JPG.jpeg", title: "Kachura Lake View", tag: "Skardu", desc: "Looking down onto the deep waters from the hills." },
     { name: "IMG_4823.JPG.jpeg", title: "Basho Valley Forest", tag: "Skardu", desc: "Hidden forest valley and roaring pine cascades." },
     { name: "IMG_4830.JPG.jpeg", title: "Deosai Camp Night", tag: "Baltistan", desc: "Milky way galaxy arching over basecamp tents." },
@@ -54,10 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     { name: "IMG_5296.JPG.jpeg", title: "Hopper Glacier Dirt", tag: "Hunza", desc: "Glaciers and moraine fields in hopper valley." },
     { name: "IMG_5302.JPG.jpeg", title: "Shimshal Valley Road", tag: "Karakoram", desc: "Unpaved gorge road carved directly into sheer rock." },
     { name: "IMG_5565.JPG.jpeg", title: "Katora Lake Turquoise", tag: "Kumrat Valley", desc: "Another view of the glacier basin's bright green water." },
-    { name: "IMG_5585.JPG.jpeg", title: "Jahaz Banda Trek", tag: "Kumrat", desc: "Hikers ascending the rocky trails through the pines." },
     { name: "IMG_5592.JPG.jpeg", title: "Kalam Forest Stream", tag: "Swat Valley", desc: "Cold glacial stream water reflecting green trees." },
     { name: "IMG_5593.JPG.jpeg", title: "Ushu Glacial Valley", tag: "Swat", desc: "Panoramic view of Kalam peaks and grazing sheep." },
-    { name: "IMG_5595.JPG.jpeg", title: "Malam Jabba Resort", tag: "Swat Valley", desc: "The modern chairlift ascending the grassy hills." },
     { name: "IMG_5597.JPG.jpeg", title: "Kashmir Green Terraces", tag: "Kashmir", desc: "Rice fields lining the sides of Azad Kashmir valleys." },
     { name: "IMG_5599.JPG.jpeg", title: "Kiran River Bank", tag: "Kashmir", desc: "Looking across the Neelum to the opposite bank." },
     { name: "IMG_5627.JPG.jpeg", title: "Kel Fort Peak", tag: "Neelum Valley", desc: "Mist covered mountains behind Arang Kel heights." },
@@ -68,7 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     { name: "IMG_7777.JPG.jpeg", title: "Rakaposhi Snow Crest", tag: "Hunza Valley", desc: "Up close view of the gigantic icy south face." },
     { name: "IMG_7778.JPG.jpeg", title: "Passu Cathedral Sunset", tag: "Hunza", desc: "Golden rays hitting the peaks of the cones." },
     { name: "IMG_7900.JPG.jpeg", title: "Deosai Lakes Glow", tag: "Baltistan", desc: "Warm sun setting over the high alpine ponds." },
-    { name: "IMG_7994.JPG.jpeg", title: "Skardu Desert Dunes", tag: "Skardu", desc: "Fine sands blowing in the high altitude winds." },
     { name: "IMG_7996.JPG.jpeg", title: "Attabad Lake Golden", tag: "Hunza Valley", desc: "Reflections of sunset on the turquoise lake." }
   ];
 
