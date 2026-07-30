@@ -239,6 +239,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const autoRotationSpeed = 0.05; 
   const damping = 0.95;           
 
+  // Accessibility Check: Listen for prefers-reduced-motion
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let prefersReducedMotion = motionQuery.matches;
+  motionQuery.addEventListener('change', () => {
+    prefersReducedMotion = motionQuery.matches;
+  });
+
   viewport.style.pointerEvents = 'auto';
   viewport.addEventListener('pointerdown', (e) => {
     isDragging = true;
@@ -274,9 +281,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     velocity += e.deltaY * 0.005;
   }, { passive: false });
 
-  window.addEventListener('resize', () => {
+  // Helper: Simple Debounce Function
+  const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
+  window.addEventListener('resize', debounce(() => {
     updateCarouselLayout();
-  });
+  }, 150), { passive: true });
 
   // Render animation frame loop
   const animate = () => {
@@ -285,8 +305,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const angleStep = 360 / count;
 
       if (!isDragging) {
-        currentAngle += velocity;
-        velocity = velocity * damping + autoRotationSpeed * (1 - damping);
+        // Accessibility optimization: stop auto-rotation if user prefers reduced motion
+        currentAngle += prefersReducedMotion ? 0 : velocity;
+        velocity = prefersReducedMotion ? 0 : (velocity * damping + autoRotationSpeed * (1 - damping));
       }
 
       carouselCards.forEach((card, idx) => {
@@ -309,7 +330,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const scale = 1 - factor * 0.38;         
         const opacity = 1 - factor * 0.78;       
         const brightness = 1 - factor * 0.68;    
-        const blur = factor * 4.0;               
 
         const wrapper = card.querySelector('.gallery-image-wrapper');
         if (wrapper) {
@@ -318,7 +338,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             wrapper.style.opacity = opacity;
           }
           wrapper.style.transform = `scale(${scale})`;
-          wrapper.style.filter = `brightness(${brightness}) blur(${blur}px)`;
+          
+          // Performance Optimization: Skip expensive CSS blur filters on mobile/touch viewports (<768px)
+          if (window.innerWidth >= 768) {
+            const blur = factor * 4.0;
+            wrapper.style.filter = `brightness(${brightness}) blur(${blur}px)`;
+          } else {
+            wrapper.style.filter = `brightness(${brightness})`;
+          }
         }
 
         if (absDiff < (180 / count) * 1.5) {

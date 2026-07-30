@@ -1,16 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Header & Global Scroll Parallax Effects ---
+  // --- Header & Scroll Sentinel Intersection Observer ---
   const header = document.querySelector('.header');
-  window.addEventListener('scroll', () => {
-    document.documentElement.style.setProperty('--scroll-y', window.scrollY);
-    if (header) {
-      if (window.scrollY > 50) {
+  const sentinel = document.getElementById('scroll-sentinel');
+  if (header && sentinel && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting) {
         header.classList.add('scrolled');
       } else {
         header.classList.remove('scrolled');
       }
-    }
-  }, { passive: true });
+    }, { root: null, threshold: 0 });
+    observer.observe(sentinel);
+  } else if (header) {
+    // Fallback scroll listener (throttled with requestAnimationFrame)
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+          } else {
+            header.classList.remove('scrolled');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
 
   // --- Mobile Menu Toggle ---
   const navToggle = document.querySelector('.nav-toggle');
@@ -335,8 +352,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    // Event listeners
-    if (searchInput) searchInput.addEventListener('input', filterTours);
+    // Helper: Simple Debounce Function
+    const debounce = (func, wait) => {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    };
+
+    // Event listeners (Debounced text search to prevent layout recalculation overhead)
+    if (searchInput) searchInput.addEventListener('input', debounce(filterTours, 150));
     if (locationSelect) locationSelect.addEventListener('change', filterTours);
     if (durationSelect) durationSelect.addEventListener('change', filterTours);
     if (levelSelect) levelSelect.addEventListener('change', filterTours);
