@@ -420,4 +420,38 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('touchstart', unlockAutoplay, { once: true, passive: true });
   window.addEventListener('touchend', unlockAutoplay, { once: true, passive: true });
   window.addEventListener('scroll', unlockAutoplay, { once: true, passive: true });
+
+  // --- Contact Form WhatsApp Redirection ---
+  const contactForm = document.getElementById('contact-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('form-name').value;
+      const email = document.getElementById('form-email').value;
+      const phone = document.getElementById('form-phone').value || 'Not provided';
+      const subject = document.getElementById('form-subject').value;
+      const message = document.getElementById('form-message').value.trim() || 'No message provided';
+      
+      // Construct the formatted message for WhatsApp
+      const whatsappMessage = `*New Website Inquiry*\n\n` +
+        `*Name:* ${name}\n` +
+        `*Email:* ${email}\n` +
+        `*Phone:* ${phone}\n` +
+        `*Subject:* ${subject}\n\n` +
+        `*Message:* ${message}`;
+        
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      const whatsappNumber = '923127600239';
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      
+      alert('Thank you! You are now being redirected to WhatsApp to send your message to Me Time We Time.');
+      
+      // Open in a new tab/window
+      window.open(whatsappUrl, '_blank');
+      
+      // Reset the form
+      contactForm.reset();
+    });
+  }
 });
