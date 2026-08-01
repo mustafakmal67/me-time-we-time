@@ -20,7 +20,7 @@
 
   <!-- Preload Global Background Image and LCP Hero Image -->
   <link rel="preload" href="images/bg-image.png" as="image">
-  <link rel="preload" href="images/tour-neelum.jpg" as="image" fetchpriority="high">
+  <link rel="preload" href="images/tour-hunza-skardu.jpg" as="image" fetchpriority="high">
 
   <!-- Phosphor Icons -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
@@ -406,22 +406,22 @@
   <!-- END: Header / TopNavBar -->
 
   <main class="tours-stage">
-    <img id="showcase-bg-active" class="showcase-bg-canvas active" src="images/tour-neelum.jpg" alt="Destination Background">
+    <img id="showcase-bg-active" class="showcase-bg-canvas active" src="images/tour-hunza-skardu.jpg" alt="Destination Background">
     <img id="showcase-bg-temp" class="showcase-bg-canvas" src="" alt="Destination Background Temp">
     <div class="showcase-bg-overlay"></div>
     
     <!-- Left Column content -->
     <div class="showcase-content" id="showcase-content">
-      <span class="showcase-location" id="showcase-location">📍 Neelum Valley</span>
-      <h1 class="showcase-title" id="showcase-title">Neelum Valley</h1>
+      <span class="showcase-location" id="showcase-location">📍 Hunza & Skardu</span>
+      <h1 class="showcase-title" id="showcase-title">8-Days Hunza & Skardu Expedition</h1>
       
       <div class="showcase-meta">
-        <span class="showcase-meta-item"><i class="ph ph-clock text-sunset-accent"></i> <span id="showcase-duration">5 Days</span></span>
-        <span class="showcase-meta-item"><i class="ph ph-calendar-check text-sunset-accent"></i> <span id="showcase-price">Custom Packages</span></span>
+        <span class="showcase-meta-item"><i class="ph ph-clock text-sunset-accent"></i> <span id="showcase-duration">8 Days</span></span>
+        <span class="showcase-meta-item"><i class="ph ph-calendar-check text-sunset-accent"></i> <span id="showcase-price">Weekly Confirmed Trip 💯</span></span>
       </div>
       
       <p class="showcase-desc" id="showcase-desc">
-        Explore the stunning Neelum Valley, a majestic corridor of lush forests, towering peaks, and crystal streams in Azad Kashmir.
+        Explore the ultimate beauty of Gilgit-Baltistan. Visit Babusar Top, Attabad Lake, Altit/Baltit Forts, Shangrila Lake, Upper Kachura Lake, and the majestic cold desert of Sarfaranga.
       </p>
       
       <div class="showcase-btn-group">
@@ -529,87 +529,156 @@
   <script src="main.js"></script>
 
   <script>
-    // Tour destinations data array (source of truth) - Replaced all pricing globally
-    const DESTINATIONS = [
+    // Tour destinations data array (source of truth) - Replaced all pricing globa    const DESTINATIONS = [
       {
-        id: "neelum",
-        name: "Neelum Valley & Taobat Road Trip",
-        location: "📍 Neelum Valley",
-        duration: "5 Days",
-        badge: "Custom Packages",
-        desc: "Explore the stunning Neelum Valley, a majestic corridor of lush forests, towering peaks, and crystal streams in Azad Kashmir. From the cable car ride to Arangkel to the border village of Taobat, this road trip is a journey into paradise.",
-        image: "images/tour-neelum.jpg",
-        detailsUrl: "contact.html?tour=neelum"
-      },
-      {
-        id: "skardu-road",
-        name: "Skardu Valley Road Trip",
-        location: "📍 Skardu Valley",
-        duration: "7 Days",
-        badge: "Private & Group Tours",
-        desc: "Embark on an epic road trip through the Karakoram Range to Skardu. Discover the serene waters of Shangrila, the giant sand dunes of Sarfaranga, and the ancient fortress of Shigar, all framed by some of the highest peaks on Earth.",
-        image: "images/skardu-valley-by-road.jpg",
-        detailsUrl: "contact.html?tour=skardu-road"
-      },
-      {
-        id: "hunza-skardu",
-        name: "Hunza and Skardu Road Trip",
+        id: "hunza-skardu-8d",
+        name: "8-Days Hunza & Skardu Expedition",
         location: "📍 Hunza & Skardu",
-        duration: "9 Days",
-        badge: "Tailor-Made Experience",
-        desc: "A grand tour combining two of Pakistan's most legendary valleys. Drive through the breathtaking Babusar Pass, marvel at the turquoise Attabad Lake, and journey into the heart of Baltistan to see Skardu's raw beauty.",
+        duration: "8 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Explore the ultimate beauty of Gilgit-Baltistan. Visit Babusar Top, Attabad Lake, Altit/Baltit Forts, Shangrila Lake, Upper Kachura Lake, and the majestic cold desert of Sarfaranga.",
         image: "images/tour-hunza-skardu.jpg",
-        detailsUrl: "contact.html?tour=hunza-skardu"
+        detailsUrl: "contact.html?tour=hunza-skardu-8d"
       },
       {
-        id: "kumrat",
-        name: "Kumrat, Jahaz Banda & Katora Lake",
-        location: "📍 Kumrat Valley",
-        duration: "5 Days",
-        badge: "Available All Year",
-        desc: "Venture deep into the untamed wilderness of Kumrat Valley. Hike through towering pine forests to the alpine meadows of Jahaz Banda, and trek to the crystal-clear waters of the glacier-fed Katora Lake.",
-        image: "images/tour-kumrat.jpg",
-        detailsUrl: "contact.html?tour=kumrat"
-      },
-      {
-        id: "skardu-air",
-        name: "Skardu Valley Expedition (Air)",
-        location: "📍 Skardu",
-        duration: "5 Days",
-        badge: "Contact Us for Details",
-        desc: "A premium, time-efficient expedition to Skardu starting with a scenic flight past Nanga Parbat. Includes high-end accommodations at Shangrila Resort, private transports, and an excursion to the high-altitude plains of Deosai.",
-        image: "images/skardu-valley-by-air.jpg",
-        detailsUrl: "contact.html?tour=skardu-air"
-      },
-      {
-        id: "hunza-air",
-        name: "Hunza Valley Expedition (Air)",
-        location: "📍 Hunza",
-        duration: "5 Days",
-        badge: "Book Your Adventure",
-        desc: "Experience the legendary Hunza Valley in premium style. Skip the long drives with a direct flight to Gilgit, then explore the ancient Forts of Altit and Baltit, sail across Attabad Lake, and watch the sun rise over Rakaposhi.",
-        image: "images/tour-hunza-skardu.jpg",
-        detailsUrl: "contact.html?tour=hunza-air"
-      },
-      {
-        id: "swat",
-        name: "Swat Valley Vacation",
-        location: "📍 Swat Valley",
-        duration: "4 Days",
-        badge: "Private & Group Tours",
-        desc: "A delightful family getaway to the 'Switzerland of the East'. Enjoy comfortable hotel stays, walk through the dense pine trees of Ushu Forest, take a chairlift ride at Malam Jabba, and explore the rushing waters of Kalam.",
-        image: "images/tour-swat.jpg",
-        detailsUrl: "contact.html?tour=swat"
-      },
-      {
-        id: "fairy-meadows",
-        name: "Fairy Meadows & Nanga Parbat",
-        location: "📍 Fairy Meadows",
+        id: "skardu-basho-6d",
+        name: "6-Days Skardu & Basho Valley",
+        location: "📍 Skardu & Basho / Deosai",
         duration: "6 Days",
-        badge: "Tailor-Made Experience",
-        desc: "Trek to the legendary Fairy Meadows, a lush alpine grassland sitting directly under the sheer face of Nanga Parbat (8,126m). Stay in rustic wooden cabins, hike to the base camp, and walk through pristine pine forests.",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Witness the unique landscape of Basho Valley, with its alpine forests, bridges, and waterfalls, alongside the high-altitude wilderness of Deosai National Park and Skardu Valley highlights.",
+        image: "images/skardu-valley-by-road.jpg",
+        detailsUrl: "contact.html?tour=skardu-basho-6d"
+      },
+      {
+        id: "astore-minimerg-6d",
+        name: "6-Days Astore & Minimerg Trip",
+        location: "📍 Astore & Minimerg",
+        duration: "6 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Discover the hidden dream of Minimerg, Rainbow Lake, Domel, and the spectacular Chilam border crossing in Astore, surrounded by raw pine-clad mountains and crystal clear water streams.",
+        image: "images/hero-tours.jpg",
+        detailsUrl: "contact.html?tour=astore-minimerg-6d"
+      },
+      {
+        id: "hunza-valley-5d",
+        name: "5-Days Hunza Valley Escape",
+        location: "📍 Hunza Valley",
+        duration: "5 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Explore the legendary Hunza Valley. Marvel at the sunset over Rakaposhi, sail on the turquoise waters of Attabad Lake, walk the Passu Suspension Bridge, and visit ancient Altit & Baltit Forts.",
+        image: "images/hunza-valley.jpg",
+        detailsUrl: "contact.html?tour=hunza-valley-5d"
+      },
+      {
+        id: "fairy-meadows-5d",
+        name: "5-Days Fairy Meadows Trek",
+        location: "📍 Fairy Meadows",
+        duration: "5 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Trek to the base camp of Nanga Parbat, the 9th highest peak in the world. Stay in cosy wooden log cabins at Fairy Meadows and witness a landscape that feels like a fairy tale come to life.",
         image: "images/fairy-meadows.jpg",
-        detailsUrl: "contact.html?tour=fairy-meadows"
+        detailsUrl: "contact.html?tour=fairy-meadows-5d"
+      },
+      {
+        id: "kashmir-5d",
+        name: "5-Days Kashmir & Kel Expedition",
+        location: "📍 Azad Kashmir",
+        duration: "5 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Experience the magic of Azad Kashmir. Journey through the winding roads of Neelum Valley, visit Sharda Peeth, Kel, and Arangkel—the jewel of Kashmir.",
+        image: "images/tour-taobat.jpg",
+        detailsUrl: "contact.html?tour=kashmir-5d"
+      },
+      {
+        id: "neelum-valley-4d",
+        name: "4-Days Neelum Valley Getaway",
+        location: "📍 Neelum Valley",
+        duration: "4 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "A beautiful short road trip into the lush corridor of Neelum Valley in Azad Kashmir. Spend refreshing days at Keran, Dhani waterfall, Kutton waterfall, and enjoy the pristine mountain air.",
+        image: "images/tour-neelum.jpg",
+        detailsUrl: "contact.html?tour=neelum-valley-4d"
+      },
+      {
+        id: "kumrat-valley-4d",
+        name: "4-Days Kumrat & Jahaz Banda",
+        location: "📍 Kumrat Valley",
+        duration: "4 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Discover the tall pine forests and wild rivers of Kumrat Valley. Hike to Jahaz Banda meadows and the stunning alpine glacier-fed Katora Lake.",
+        image: "images/tour-kumrat.jpg",
+        detailsUrl: "contact.html?tour=kumrat-valley-4d"
+      },
+      {
+        id: "neelum-valley-3d",
+        name: "3-Days Neelum Valley Recharge",
+        location: "📍 Neelum Valley",
+        duration: "3 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "A quick 3-day weekend road trip to the scenic highlights of Neelum Valley in Azad Kashmir. Visit Keran, Kutton waterfall, and enjoy a Riverside bonfire.",
+        image: "images/bento-arangkel.jpg",
+        detailsUrl: "contact.html?tour=neelum-valley-3d"
+      },
+      {
+        id: "kumrat-valley-3d",
+        name: "3-Days Kumrat Valley Escape",
+        location: "📍 Kumrat Valley",
+        duration: "3 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Escape to the beautiful pine woods and cascading waterfalls of Kumrat Valley. Experience camping by the Panjkora River and explore Kumrat forest.",
+        image: "images/bento-kumrat.jpg",
+        detailsUrl: "contact.html?tour=kumrat-valley-3d"
+      },
+      {
+        id: "swat-valley-3d",
+        name: "3-Days Swat Valley Vacation",
+        location: "📍 Swat Valley",
+        duration: "3 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Explore Kalam, the dense pine trees of Ushu Forest, Mahodand Lake, and the snow activities or chairlift ride at Malam Jabba in Swat, the Switzerland of the East.",
+        image: "images/tour-swat.jpg",
+        detailsUrl: "contact.html?tour=swat-valley-3d"
+      },
+      {
+        id: "naran-valley-3d",
+        name: "3-Days Naran & Saif-ul-Malook",
+        location: "📍 Naran Valley",
+        duration: "3 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "A classic mountain getaway to Naran & Kaghan. Visit the magical Lake Saif-ul-Malook, Babusar Pass, and Lulusar Lake nestled high in the Himalayas.",
+        image: "images/tour-naran.jpg",
+        detailsUrl: "contact.html?tour=naran-valley-3d"
+      },
+      {
+        id: "shogran-siri-paye-2d",
+        name: "2-Days Shogran & Siri Paye",
+        location: "📍 Shogran & Siri Paye",
+        duration: "2 Days",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "A weekend escape to Shogran. Take a 4x4 jeep ride up to the high alpine meadows of Siri Paye and enjoy panoramic mountain views and lush green pastures.",
+        image: "images/tour-shogran.jpg",
+        detailsUrl: "contact.html?tour=shogran-siri-paye-2d"
+      },
+      {
+        id: "umbrella-waterfall-1d",
+        name: "1-Day Umbrella Waterfall Trek",
+        location: "📍 Umbrella Waterfall",
+        duration: "1 Day",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Visit the spectacular Umbrella Waterfall in the Poona Valley. A perfect one-day trip featuring a short hike, crystal-clear pools, and scenic water flow.",
+        image: "images/about-story.jpg",
+        detailsUrl: "contact.html?tour=umbrella-waterfall-1d"
+      },
+      {
+        id: "mushkpuri-top-1d",
+        name: "1-Day Mushkpuri Peak Hike",
+        location: "📍 Mushkpuri Top",
+        duration: "1 Day",
+        badge: "Weekly Confirmed Trip 💯",
+        desc: "Trek through the beautiful pine forests of Galyat to Mushkpuri Top. Enjoy spectacular 360-degree views of Kashmir and the surrounding hills.",
+        image: "images/hero-about.jpg",
+        detailsUrl: "contact.html?tour=mushkpuri-top-1d"
       }
     ];
 
