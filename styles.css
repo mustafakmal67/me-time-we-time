@@ -307,6 +307,10 @@ p, span, li, a, button, label, input, textarea {
   .display-lg-mobile {
     font-size: 28px;
   }
+  .title-brand-fluid {
+    font-size: clamp(14px, 3.8vw, 28px) !important;
+    white-space: nowrap;
+  }
   h1 { font-size: 36px; }
   h2 { font-size: 28px; }
   h3 { font-size: 22px; }
@@ -318,6 +322,11 @@ p, span, li, a, button, label, input, textarea {
   }
   .display-lg-mobile {
     font-size: 22px !important;
+  }
+  .title-brand-fluid {
+    font-size: clamp(10px, 3.6vw, 18px) !important;
+    white-space: nowrap;
+    letter-spacing: -0.03em;
   }
   .headline-lg {
     font-size: 22px !important;
