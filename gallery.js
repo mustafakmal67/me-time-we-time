@@ -181,9 +181,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       card.className = 'gallery-card has-image';
       card.setAttribute('data-index', i);
       
+      // Eagerly load front-facing cards, lazy load others
+      const isFrontCard = (i === 0 || i === 1 || i === cardCount - 1);
+      const initialSrc = isFrontCard ? `our gallery/${item.name}` : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+      
       card.innerHTML = `
         <div class="gallery-image-wrapper">
-          <img class="gallery-img" alt="${item.title}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease, transform 0.6s ease;">
+          <img class="gallery-img" alt="${item.title}" src="${initialSrc}" loading="${isFrontCard ? 'eager' : 'lazy'}">
           <div class="gallery-placeholder">
             <div class="shimmer-effect"></div>
             <div class="placeholder-icon"><i class="ph ph-camera"></i></div>
@@ -196,10 +200,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       const img = card.querySelector('.gallery-img');
       img.onload = () => {
+        img.style.opacity = '1';
         img.classList.add('loaded');
         const placeholder = card.querySelector('.gallery-placeholder');
         if (placeholder) placeholder.style.display = 'none';
       };
+      
+      // Auto-resolve already completed/cached image loads
+      if (img.complete) {
+        setTimeout(() => {
+          if (img.complete) {
+            img.style.opacity = '1';
+            img.classList.add('loaded');
+            const placeholder = card.querySelector('.gallery-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+          }
+        }, 50);
+      }
       img.onerror = () => handleImageError(i, img);
 
       card.addEventListener('click', () => {
