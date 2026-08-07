@@ -399,6 +399,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, { threshold: 0.01 }); // Set a very low threshold to prevent false-negative pauses on load/minor scrolls
 
+    window.videoObserver = videoObserver;
+
     document.querySelectorAll('video').forEach(video => {
       videoObserver.observe(video);
     });
@@ -452,6 +454,41 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Reset the form
       contactForm.reset();
+    });
+  }
+
+  // --- Dynamic Desktop Video Background Progressive Loader ---
+  const mediaContainer = document.getElementById("hero-media-container");
+  if (mediaContainer && window.innerWidth >= 768 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const video = document.createElement("video");
+        video.autoplay = true;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.className = "hero-video";
+        
+        const webmSource = document.createElement("source");
+        webmSource.src = "optimized-video.webm";
+        webmSource.type = "video/webm";
+        video.appendChild(webmSource);
+        
+        const mp4Source = document.createElement("source");
+        mp4Source.src = "optimized-video.mp4";
+        mp4Source.type = "video/mp4";
+        video.appendChild(mp4Source);
+
+        video.addEventListener("canplay", () => {
+          video.classList.add("loaded");
+        });
+
+        mediaContainer.appendChild(video);
+        
+        if (window.videoObserver) {
+          window.videoObserver.observe(video);
+        }
+      }, 400);
     });
   }
 });

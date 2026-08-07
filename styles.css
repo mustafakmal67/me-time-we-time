@@ -426,7 +426,8 @@ p, span, li, a, button, label, input, textarea {
 
 .logo img {
   height: 70px;
-  width: auto;
+  width: 70px;
+  aspect-ratio: 1;
   object-fit: contain;
   display: block;
   filter: brightness(0) invert(1); /* Converts black logo graphic to pure white */
@@ -434,7 +435,8 @@ p, span, li, a, button, label, input, textarea {
 
 .footer-logo img {
   height: 95px;
-  width: auto;
+  width: 95px;
+  aspect-ratio: 1;
   object-fit: contain;
   display: block;
   filter: brightness(0) invert(1); /* Converts black logo graphic to pure white */
@@ -506,6 +508,7 @@ p, span, li, a, button, label, input, textarea {
   }
   .logo img {
     height: 50px;
+    width: 50px;
   }
   .nav-toggle {
     display: block;
@@ -1242,9 +1245,45 @@ p, span, li, a, button, label, input, textarea {
   color: rgba(255, 255, 255, 0.95) !important;
 }
 
+/* Optimized Dynamic Video Background CSS */
+.hero-media-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hero-video.loaded {
+  opacity: 1;
+}
+
 .hero-home-content {
   max-width: 960px !important;
   padding: 48px 32px;
+  position: relative;
+  z-index: 10; /* Ensure content stays above video */
 }
 
 .hero-home-title {
@@ -1899,6 +1938,7 @@ p, span, li, a, button, label, input, textarea {
   }
   .footer-logo img {
     height: 70px !important;
+    width: 70px !important;
   }
 }
 

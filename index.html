@@ -15,15 +15,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Google Fonts (Inter, Poppins, Playfair Display) -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap">
-
-  <!-- Preload Global Background Image -->
-  <link rel="preload" href="images/bg-image.jpg" as="image">
-
-  <!-- Phosphor Icons -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" media="print" onload="this.media='all'">
+  <!-- Self-Hosted Typography & Icons (Offline & 20-Year Future Proof) -->
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="fonts/phosphor/style.css" media="print" onload="this.media='all'">
   
   <!-- Nomadic Horizon Stylesheet -->
   <link rel="stylesheet" href="styles.css">
@@ -35,7 +29,7 @@
   <!-- BEGIN: Header / TopNavBar -->
   <header class="header">
     <div class="header-container">
-      <a href="index.html" class="logo"><img src="images/bg-free-logo.png" alt="Me Time We Time Logo"></a>
+      <a href="index.html" class="logo"><img src="images/bg-free-logo.png" alt="Me Time We Time Logo" width="500" height="500"></a>
       
       <nav class="nav-menu" id="nav-menu">
         <a class="nav-link active" href="index.html">Home</a>
@@ -56,6 +50,9 @@
 
   <!-- BEGIN: HeroSection -->
   <section class="hero hero-home">
+    <div class="hero-media-container" id="hero-media-container">
+      <img src="images/video-poster.jpg" alt="Scenic Pakistan Landscapes" class="hero-poster-img" fetchpriority="high">
+    </div>
     <div class="container hero-content hero-home-content text-center">
       <span class="badge" style="display: inline-block; padding: 8px 18px; border-radius: var(--radius-full); margin-bottom: 24px; font-weight: 800; font-size: clamp(10px, 1.8vw, 12.5px); letter-spacing: 0.15em; background-color: var(--sunset-accent); color: #ffffff; text-shadow: none; box-shadow: 0 4px 15px rgba(245, 130, 32, 0.35);">
         PAKISTAN'S PREMIER TRAVEL COMPANY
@@ -381,12 +378,12 @@
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand-col">
-          <div class="footer-logo"><img src="images/bg-free-logo.png" alt="Me Time We Time Logo"></div>
+          <div class="footer-logo"><img src="images/bg-free-logo.png" alt="Me Time We Time Logo" width="500" height="500"></div>
           <p class="footer-desc">Me Time We Time is a trusted travel company specializing in custom adventure tourism across Northern Pakistan, including Hunza, Skardu, Swat, Fairy Meadows, Naran, and beyond. We focus on creating unforgettable journeys for solo travelers, families, and adventure communities.</p>
           <div class="social-links">
-            <a class="social-link" href="https://www.facebook.com/metimewetime877" target="_blank"><i class="ph ph-facebook-logo"></i></a>
-            <a class="social-link" href="https://www.instagram.com/metime_wetime" target="_blank"><i class="ph ph-instagram-logo"></i></a>
-            <a class="social-link" href="#"><i class="ph ph-x-logo"></i></a>
+            <a class="social-link" href="https://www.facebook.com/metimewetime877" target="_blank" aria-label="Facebook Page"><i class="ph ph-facebook-logo"></i></a>
+            <a class="social-link" href="https://www.instagram.com/metime_wetime" target="_blank" aria-label="Instagram Page"><i class="ph ph-instagram-logo"></i></a>
+            <a class="social-link" href="#" aria-label="X Profile"><i class="ph ph-x-logo"></i></a>
           </div>
         </div>
         
@@ -431,8 +428,8 @@
           <div class="mt-8">
             <span class="newsletter-title">Newsletter</span>
             <form class="newsletter-form">
-              <input class="newsletter-input" placeholder="Your email" type="email" required>
-              <button class="newsletter-btn" type="submit"><i class="ph ph-arrow-right"></i></button>
+              <input class="newsletter-input" placeholder="Your email" type="email" aria-label="Newsletter Email Address" required>
+              <button class="newsletter-btn" type="submit" aria-label="Subscribe to newsletter"><i class="ph ph-arrow-right"></i></button>
             </form>
           </div>
         </div>
@@ -451,7 +448,7 @@
 
   </div>
 
-  <a href="https://wa.me/923127600239?text=Hello%20Me%20Time%20We%20Time%20I%20would%20like%20to%20inquire%20about%20a%20tour" class="whatsapp-floating-btn" target="_blank" rel="noopener noreferrer"><i class="ph ph-whatsapp-logo"></i></a>
+  <a href="https://wa.me/923127600239?text=Hello%20Me%20Time%20We%20Time%20I%20would%20like%20to%20inquire%20about%20a%20tour" class="whatsapp-floating-btn" aria-label="Contact us on WhatsApp" target="_blank" rel="noopener noreferrer"><i class="ph ph-whatsapp-logo"></i></a>
 
   <!-- WebGL Shader Background -->
   <script src="shader-bg.js"></script>
