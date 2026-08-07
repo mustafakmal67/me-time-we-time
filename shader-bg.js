@@ -24,7 +24,7 @@
       }
     `;
 
-    // 3. Fragment Shader Source (Cinematic Domain Warping with Brand Colors)
+    // 3. Fragment Shader Source (Cinematic Domain Warping with Brand Colors - Optimized to 2 octaves)
     const fsSource = `
       precision mediump float;
       uniform float u_time;
@@ -47,14 +47,13 @@
         );
       }
 
-      // Fractional Brownian Motion (4 octaves)
+      // Fractional Brownian Motion (Reduced to 2 octaves for high speed)
       float fbm(vec2 p) {
         float v = 0.0;
         float a = 0.5;
         vec2 shift = vec2(100.0);
-        // Rotate to reduce axial alignment bias
         mat2 rot = mat2(0.87758, 0.47942, -0.47942, 0.87758);
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 2; ++i) {
           v += a * noise(p);
           p = rot * p * 2.0 + shift;
           a *= 0.5;
@@ -69,18 +68,13 @@
         // Scale coordinate system for aesthetic detail density
         p *= 1.2;
 
-        // Domain Warping: offset coordinate lookup using multi-layered noise
+        // Domain Warping: offset coordinate lookup using noise (reduced computations)
         vec2 q = vec2(
           fbm(p + vec2(0.0, 0.0) + u_time * 0.015),
           fbm(p + vec2(5.2, 1.3) + u_time * 0.012)
         );
 
-        vec2 r = vec2(
-          fbm(p + 3.0 * q + vec2(1.7, 9.2) + u_time * 0.008),
-          fbm(p + 3.0 * q + vec2(8.3, 2.8) + u_time * 0.005)
-        );
-
-        float f = fbm(p + 3.5 * r);
+        float f = fbm(p + 3.0 * q);
 
         // Palette definitions:
         // Charcoal (#080b09) -> rgb(8, 11, 9)
@@ -94,9 +88,9 @@
         // Mix the colors based on warped coordinates
         vec3 color = mix(c_charcoal, c_green, clamp(f * 1.4, 0.0, 1.0));
         color = mix(color, c_orange, clamp(length(q) * 0.7, 0.0, 1.0));
-        color = mix(color, c_ambient, clamp(r.x * 0.5, 0.0, 1.0));
+        color = mix(color, c_ambient, clamp(f * 0.3, 0.0, 1.0));
 
-        // Output final color with full opacity (CSS rules control transparency and blending)
+        // Output final color with full opacity
         gl_FragColor = vec4(color, 1.0);
       }
     `;
@@ -185,8 +179,21 @@
       manageRenderLoop();
     });
 
+    const fps = 24;
+    const fpsInterval = 1000 / fps;
+    let lastDrawTime = Date.now();
+
     function draw() {
       if (!gl) return;
+
+      animationFrameId = requestAnimationFrame(draw);
+
+      const now = Date.now();
+      const elapsed = now - lastDrawTime;
+      if (elapsed < fpsInterval) {
+        return; // Skip rendering this frame to save CPU/GPU cycles
+      }
+      lastDrawTime = now - (elapsed % fpsInterval);
 
       const elapsedSeconds = (Date.now() - startTime) / 1000.0;
 
@@ -201,13 +208,10 @@
       gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-      // Loop
-      animationFrameId = requestAnimationFrame(draw);
     }
 
     function manageRenderLoop() {
-      const shouldRun = isPageVisible && !prefersReducedMotion;
+      const shouldRun = isPageVisible && !prefersReducedMotion && window.innerWidth >= 768;
       if (shouldRun) {
         if (!animationFrameId) {
           // Adjust start time to prevent sudden jump in animation

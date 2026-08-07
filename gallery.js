@@ -67,6 +67,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let carouselCards = [];
   let activeImages = [];
+  let isGalleryVisible = true;
+  let animateFrameId = null;
+  let resumeAudioLoop = null;
   let currentActiveIndex = 0;
   const DISPLAY_LIMIT = 12; // Maximum visual slots in the 3D cylinder
   let radius = 400;
@@ -170,10 +173,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       activeImages.push(imagePool[i]);
     }
 
-    // Render slots (using loading="eager" so they render immediately inside the 3D projection on load)
+    // Render slots (progressive loading setup)
     for (let i = 0; i < cardCount; i++) {
       const item = activeImages[i];
-      const imgSrc = `our gallery/${item.name}`;
       
       const card = document.createElement('div');
       card.className = 'gallery-card has-image';
@@ -181,11 +183,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       card.innerHTML = `
         <div class="gallery-image-wrapper">
-          <img class="gallery-img loaded" alt="${item.title}" src="${imgSrc}" loading="eager" style="width: 100%; height: 100%; object-fit: cover; opacity: 1;">
+          <img class="gallery-img" alt="${item.title}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease, transform 0.6s ease;">
+          <div class="gallery-placeholder">
+            <div class="shimmer-effect"></div>
+            <div class="placeholder-icon"><i class="ph ph-camera"></i></div>
+            <span class="placeholder-tag">${item.tag}</span>
+            <h3 class="placeholder-title">${item.title}</h3>
+            <p class="placeholder-text">Loading...</p>
+          </div>
         </div>
       `;
       
       const img = card.querySelector('.gallery-img');
+      img.onload = () => {
+        img.classList.add('loaded');
+        const placeholder = card.querySelector('.gallery-placeholder');
+        if (placeholder) placeholder.style.display = 'none';
+      };
       img.onerror = () => handleImageError(i, img);
 
       card.addEventListener('click', () => {
@@ -300,6 +314,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Render animation frame loop
   const animate = () => {
+    if (!isGalleryVisible) {
+      animateFrameId = null;
+      return;
+    }
+
     const count = carouselCards.length;
     if (count > 0) {
       const angleStep = 360 / count;
@@ -355,15 +374,41 @@ document.addEventListener('DOMContentLoaded', async () => {
           card.style.pointerEvents = 'none';
           card.classList.remove('is-active');
         }
+
+        // Progressive image loading: only download image when card is visible in view (< 110 degrees)
+        if (absDiff < 110) {
+          const img = card.querySelector('.gallery-img');
+          if (img && (!img.src || img.src.includes('data:image'))) {
+            const item = activeImages[idx];
+            img.src = `our gallery/${item.name}`;
+          }
+        }
       });
     }
-    requestAnimationFrame(animate);
+    animateFrameId = requestAnimationFrame(animate);
   };
 
-  animate();
+  // IntersectionObserver to pause rendering loops when gallery is off-screen
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      isGalleryVisible = entries[0].isIntersecting;
+      if (isGalleryVisible) {
+        if (!animateFrameId) {
+          animate();
+        }
+        if (resumeAudioLoop) {
+          resumeAudioLoop();
+        }
+      }
+    }, { threshold: 0.05 });
+    observer.observe(viewport);
+  } else {
+    animate();
+  }
 
   // --- Dynamic Carousel Image Swapping at the Back ---
   const rotateBackCard = () => {
+    if (!isGalleryVisible) return;
     const count = carouselCards.length;
     if (count <= 0 || imagePool.length <= count) return;
 
@@ -402,6 +447,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             // Define clean restore function to fade card back in smoothly
             const fadeInCard = () => {
+              img.classList.add('loaded');
+              const placeholder = card.querySelector('.gallery-placeholder');
+              if (placeholder) placeholder.style.display = 'none';
+
               // Calculate target opacity based on current rotation angle
               const angleStep = 360 / count;
               const baseAngle = bestIdx * angleStep;
@@ -590,8 +639,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       targetVolume = easedFactor * MAX_VOLUME;
     };
 
+    let smoothVolumeLoopFrameId = null;
+
     // Smooth Lerp Volume Loop (Liquid Volume Transition)
     const smoothVolumeLoop = () => {
+      if (!isGalleryVisible) {
+        smoothVolumeLoopFrameId = null;
+        return;
+      }
+      
       const step = isMuted ? 0.15 : 0.05; // faster fade for mute/unmute
       const goalVolume = isMuted ? 0 : targetVolume;
       
@@ -622,7 +678,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateUI();
       }
       
-      requestAnimationFrame(smoothVolumeLoop);
+      smoothVolumeLoopFrameId = requestAnimationFrame(smoothVolumeLoop);
+    };
+
+    resumeAudioLoop = () => {
+      if (!smoothVolumeLoopFrameId) {
+        smoothVolumeLoopFrameId = requestAnimationFrame(smoothVolumeLoop);
+      }
     };
 
     // Unlock Audio Context on first interaction
@@ -685,15 +747,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
-    // Scroll and Resize handlers
-    window.addEventListener('scroll', updateVolume, { passive: true });
-    window.addEventListener('resize', updateVolume, { passive: true });
+    // Scroll and Resize handlers with requestAnimationFrame throttling
+    let scrollTicking = false;
+    const throttledUpdateVolume = () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+          updateVolume();
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    };
+
+    window.addEventListener('scroll', throttledUpdateVolume, { passive: true });
+    window.addEventListener('resize', throttledUpdateVolume, { passive: true });
 
     // Initial check
     updateVolume();
     
     // Start smooth animation loop
-    requestAnimationFrame(smoothVolumeLoop);
+    smoothVolumeLoopFrameId = requestAnimationFrame(smoothVolumeLoop);
   };
 
   initAmbientAudio();

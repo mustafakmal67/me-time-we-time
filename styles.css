@@ -2992,4 +2992,11 @@ p, span, li, a, button, label, input, textarea {
   }
 }
 
+/* Hide WebGL shader canvas on mobile viewports for performance optimization */
+@media (max-width: 768px) {
+  #shader-bg {
+    display: none !important;
+  }
+}
+
 
