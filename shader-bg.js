@@ -154,7 +154,10 @@
       height = window.innerHeight;
       
       // Reduce resolution slightly on low-dpi displays or for performance optimization
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      if (width < 768) {
+        dpr = 0.85; // Low resolution rendering on mobile to save GPU power
+      }
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);

@@ -408,7 +408,7 @@
 
   <main class="tours-stage">
     <img id="showcase-bg-active" class="showcase-bg-canvas active" src="images/tour-hunza-skardu.jpg" alt="Destination Background">
-    <img id="showcase-bg-temp" class="showcase-bg-canvas" src="" alt="Destination Background Temp">
+    <img id="showcase-bg-temp" class="showcase-bg-canvas" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Destination Background Temp">
     <div class="showcase-bg-overlay"></div>
     
     <!-- Left Column content -->
@@ -544,7 +544,7 @@
       },
       {
         id: "skardu-basho-6d",
-        name: "6-Days Skardu & Basho Valley",
+        name: "6-Days Skardu & Basho Valley / Deosai",
         location: "📍 Skardu & Basho / Deosai",
         duration: "6 Days",
         badge: "Weekly Confirmed Trip 💯",
@@ -765,65 +765,71 @@
         firstCard.classList.add("expanding");
       }
       
-      // Preload next image
-      const imgPreload = new Image();
-      imgPreload.src = nextData.image;
-      imgPreload.onload = () => {
-        // Transition track dynamically based on viewport (224px desktop, 166px mobile)
-        const cardWidth = window.innerWidth < 768 ? 150 : 200;
-        const gap = window.innerWidth < 768 ? 16 : 24;
-        const shiftX = -(cardWidth + gap);
-        
-        track.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
-        track.style.transform = `translateX(${shiftX}px)`;
-        
-        // Transition text content (300-500ms duration)
-        showcaseContent.classList.add("fade-out");
-        
-        // Transition Background
-        bgTemp.src = nextData.image;
+      // Transition track dynamically based on viewport (224px desktop, 166px mobile)
+      const cardWidth = window.innerWidth < 768 ? 150 : 200;
+      const gap = window.innerWidth < 768 ? 16 : 24;
+      const shiftX = -(cardWidth + gap);
+      
+      track.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
+      track.style.transform = `translateX(${shiftX}px)`;
+      
+      // Transition text content (300-500ms duration)
+      showcaseContent.classList.add("fade-out");
+      
+      // Set background image source asynchronously
+      bgTemp.src = nextData.image;
+      
+      // Bind load handler to trigger transition once downloaded
+      const onBgLoaded = () => {
         bgTemp.classList.add("active");
+        bgTemp.removeEventListener("load", onBgLoaded);
+        bgTemp.removeEventListener("error", onBgError);
+      };
+      const onBgError = () => {
+        bgTemp.removeEventListener("load", onBgLoaded);
+        bgTemp.removeEventListener("error", onBgError);
+      };
+      bgTemp.addEventListener("load", onBgLoaded);
+      bgTemp.addEventListener("error", onBgError);
+      if (bgTemp.complete) {
+        onBgLoaded();
+      }
+      
+      setTimeout(() => {
+        // Update texts
+        showcaseLocation.textContent = nextData.location;
+        showcaseTitle.textContent = nextData.name.split(',')[0];
+        showcaseDuration.textContent = nextData.duration;
+        showcasePrice.textContent = nextData.badge;
+        showcaseDesc.textContent = nextData.desc;
+        showcaseNumber.textContent = String(nextIndex + 1).padStart(2, '0');
+        showcaseBtn.href = nextData.detailsUrl;
         
-        setTimeout(() => {
-          // Update texts
-          showcaseLocation.textContent = nextData.location;
-          showcaseTitle.textContent = nextData.name.split(',')[0];
-          showcaseDuration.textContent = nextData.duration;
-          showcasePrice.textContent = nextData.badge;
-          showcaseDesc.textContent = nextData.desc;
-          showcaseNumber.textContent = String(nextIndex + 1).padStart(2, '0');
-          showcaseBtn.href = nextData.detailsUrl;
-          
-          showcaseContent.classList.remove("fade-out");
-        }, 250);
+        showcaseContent.classList.remove("fade-out");
+      }, 250);
 
-        setTimeout(() => {
-          // Remove expanding class before shifting
-          if (firstCard) {
-            firstCard.classList.remove("expanding");
-          }
-          
-          // Move the first card to the end of track DOM
-          track.appendChild(firstCard);
-          
-          // Reset track translate instantly
-          track.style.transition = "none";
-          track.style.transform = "translateX(0)";
-          
-          // Swap backgrounds
-          bgActive.src = nextData.image;
-          bgTemp.classList.remove("active");
-          
-          currentIndex = nextIndex;
-          initCarousel();
-          
-          isTransitioning = false;
-        }, 600);
-      };
-      imgPreload.onerror = () => {
-        if (firstCard) firstCard.classList.remove("expanding");
+      setTimeout(() => {
+        // Remove expanding class before shifting
+        if (firstCard) {
+          firstCard.classList.remove("expanding");
+        }
+        
+        // Move the first card to the end of track DOM
+        track.appendChild(firstCard);
+        
+        // Reset track translate instantly
+        track.style.transition = "none";
+        track.style.transform = "translateX(0)";
+        
+        // Swap backgrounds
+        bgActive.src = nextData.image;
+        bgTemp.classList.remove("active");
+        
+        currentIndex = nextIndex;
+        initCarousel();
+        
         isTransitioning = false;
-      };
+      }, 600);
     }
 
     // Move prev (Slide right)
@@ -834,60 +840,67 @@
       const prevIndex = (currentIndex - 1 + DESTINATIONS.length) % DESTINATIONS.length;
       const prevData = DESTINATIONS[prevIndex];
       
-      const imgPreload = new Image();
-      imgPreload.src = prevData.image;
-      imgPreload.onload = () => {
-        currentIndex = prevIndex;
-        initCarousel();
-        
-        const cardWidth = window.innerWidth < 768 ? 150 : 200;
-        const gap = window.innerWidth < 768 ? 16 : 24;
-        const shiftX = -(cardWidth + gap);
-        
-        track.style.transition = "none";
-        track.style.transform = `translateX(${shiftX}px)`;
-        
-        const firstCard = track.firstElementChild;
-        if (firstCard) {
-          firstCard.classList.add("expanding");
-        }
-        
-        track.offsetHeight; // force reflow
-        
-        track.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
-        track.style.transform = "translateX(0)";
-        
-        showcaseContent.classList.add("fade-out");
-        bgTemp.src = prevData.image;
+      currentIndex = prevIndex;
+      initCarousel();
+      
+      const cardWidth = window.innerWidth < 768 ? 150 : 200;
+      const gap = window.innerWidth < 768 ? 16 : 24;
+      const shiftX = -(cardWidth + gap);
+      
+      track.style.transition = "none";
+      track.style.transform = `translateX(${shiftX}px)`;
+      
+      const firstCard = track.firstElementChild;
+      if (firstCard) {
+        firstCard.classList.add("expanding");
+      }
+      
+      track.offsetHeight; // force reflow
+      
+      track.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
+      track.style.transform = "translateX(0)";
+      
+      showcaseContent.classList.add("fade-out");
+      bgTemp.src = prevData.image;
+      
+      const onBgLoaded = () => {
         bgTemp.classList.add("active");
+        bgTemp.removeEventListener("load", onBgLoaded);
+        bgTemp.removeEventListener("error", onBgError);
+      };
+      const onBgError = () => {
+        bgTemp.removeEventListener("load", onBgLoaded);
+        bgTemp.removeEventListener("error", onBgError);
+      };
+      bgTemp.addEventListener("load", onBgLoaded);
+      bgTemp.addEventListener("error", onBgError);
+      if (bgTemp.complete) {
+        onBgLoaded();
+      }
+      
+      setTimeout(() => {
+        if (firstCard) {
+          firstCard.classList.remove("expanding");
+        }
+      }, 50);
+      
+      setTimeout(() => {
+        showcaseLocation.textContent = prevData.location;
+        showcaseTitle.textContent = prevData.name.split(',')[0];
+        showcaseDuration.textContent = prevData.duration;
+        showcasePrice.textContent = prevData.badge;
+        showcaseDesc.textContent = prevData.desc;
+        showcaseNumber.textContent = String(prevIndex + 1).padStart(2, '0');
+        showcaseBtn.href = prevData.detailsUrl;
         
-        setTimeout(() => {
-          if (firstCard) {
-            firstCard.classList.remove("expanding");
-          }
-        }, 50);
-        
-        setTimeout(() => {
-          showcaseLocation.textContent = prevData.location;
-          showcaseTitle.textContent = prevData.name.split(',')[0];
-          showcaseDuration.textContent = prevData.duration;
-          showcasePrice.textContent = prevData.badge;
-          showcaseDesc.textContent = prevData.desc;
-          showcaseNumber.textContent = String(prevIndex + 1).padStart(2, '0');
-          showcaseBtn.href = prevData.detailsUrl;
-          
-          showcaseContent.classList.remove("fade-out");
-        }, 250);
+        showcaseContent.classList.remove("fade-out");
+      }, 250);
 
-        setTimeout(() => {
-          bgActive.src = prevData.image;
-          bgTemp.classList.remove("active");
-          isTransitioning = false;
-        }, 600);
-      };
-      imgPreload.onerror = () => {
+      setTimeout(() => {
+        bgActive.src = prevData.image;
+        bgTemp.classList.remove("active");
         isTransitioning = false;
-      };
+      }, 600);
     }
 
     // Touch Swipe Gestures support for mobile

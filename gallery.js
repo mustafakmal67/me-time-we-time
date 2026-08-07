@@ -399,12 +399,41 @@ document.addEventListener('DOMContentLoaded', async () => {
           
           setTimeout(() => {
             activeImages[bestIdx] = nextItem;
+            
+            // Define clean restore function to fade card back in smoothly
+            const fadeInCard = () => {
+              // Calculate target opacity based on current rotation angle
+              const angleStep = 360 / count;
+              const baseAngle = bestIdx * angleStep;
+              const cardAngle = baseAngle + currentAngle;
+              let diff = cardAngle % 360;
+              while (diff < -180) diff += 360;
+              while (diff > 180) diff -= 360;
+              const absDiff = Math.abs(diff);
+              const factor = Math.min(1, absDiff / 180);
+              const targetOpacity = 1 - factor * 0.78;
+
+              wrapper.style.transition = 'opacity 0.5s ease';
+              wrapper.style.opacity = targetOpacity;
+
+              setTimeout(() => {
+                wrapper.style.transition = '';
+                img.onload = null;
+                img.onerror = null;
+              }, 500);
+            };
+
+            img.onload = fadeInCard;
+            img.onerror = fadeInCard;
             img.src = `our gallery/${nextItem.name}`;
             img.alt = nextItem.title;
             
+            // Fallback safety timeout
             setTimeout(() => {
-              wrapper.style.transition = '';
-            }, 50);
+              if (img.onload === fadeInCard) {
+                fadeInCard();
+              }
+            }, 600);
           }, 500);
         }
       }
@@ -484,11 +513,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const viewportEl = document.getElementById('gallery-viewport');
     if (!viewportEl) return;
 
-    // Create Background Music Object
+    // Create Background Music Object with no preloading source
     const bgMusic = new Audio();
-    bgMusic.src = 'gallery_bg.mp3';
     bgMusic.loop = true;
-    bgMusic.preload = 'auto';
+    bgMusic.preload = 'none';
     bgMusic.volume = 0;
 
     let audioUnlocked = false;
@@ -576,6 +604,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       // Control play/pause states based on volume threshold
       if (currentVolume > 0 && bgMusic.paused) {
+        if (!bgMusic.src || bgMusic.src === '' || bgMusic.src.indexOf('gallery_bg.mp3') === -1) {
+          bgMusic.src = 'gallery_bg.mp3';
+          bgMusic.load();
+        }
         if (resetOnPlay) {
           bgMusic.currentTime = 0; // Restart from the beginning as requested
           resetOnPlay = false;
@@ -597,14 +629,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const unlockAudio = () => {
       if (audioUnlocked) return;
       
-      bgMusic.play().then(() => {
-        audioUnlocked = true;
-        removeUnlockListeners();
-        updateVolume();
-        updateUI();
-      }).catch(err => {
-        console.log("Audio unlock deferred:", err);
-      });
+      // Only unlock and load if the user is looking at the gallery section
+      const rect = viewportEl.getBoundingClientRect();
+      const isVisible = rect.bottom >= 0 && rect.top <= window.innerHeight;
+      
+      if (isVisible) {
+        if (!bgMusic.src || bgMusic.src === '') {
+          bgMusic.src = 'gallery_bg.mp3';
+          bgMusic.load();
+        }
+        bgMusic.play().then(() => {
+          audioUnlocked = true;
+          removeUnlockListeners();
+          updateVolume();
+          updateUI();
+        }).catch(err => {
+          console.log("Audio unlock deferred:", err);
+        });
+      }
     };
 
     const removeUnlockListeners = () => {
@@ -622,6 +664,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (muteBtn) {
       muteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        if (!bgMusic.src || bgMusic.src === '') {
+          bgMusic.src = 'gallery_bg.mp3';
+          bgMusic.load();
+        }
         if (!audioUnlocked) {
           bgMusic.play().then(() => {
             audioUnlocked = true;
