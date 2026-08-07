@@ -166,7 +166,6 @@ body {
   pointer-events: none;
   display: block;
   opacity: 0.10;            /* Soft light tint for light theme */
-  mix-blend-mode: color;    /* applies only hue/sat; preserves contrast */
 }
 
 a {

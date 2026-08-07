@@ -695,7 +695,7 @@
     const scrollerLeftBtn = document.getElementById("scroller-left");
     const scrollerRightBtn = document.getElementById("scroller-right");
 
-    // Initialize Destinations Carousel
+    // Initialize Destinations Carousel (Built once on DOMContentLoaded)
     function initCarousel() {
       track.innerHTML = "";
       for (let i = 1; i <= DESTINATIONS.length; i++) {
@@ -718,25 +718,18 @@
           </div>
         `;
         
-        // Click to slide
+        // Click to slide (Transition to next)
         card.addEventListener("click", () => {
           if (isTransitioning) return;
-          const clickedIndex = destIndex;
-          let steps = (clickedIndex - currentIndex + DESTINATIONS.length) % DESTINATIONS.length;
-          if (steps > 0) {
-            moveNext();
-          }
+          moveNext();
         });
         
         // Keypress accessibility
         card.addEventListener("keydown", (e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            const clickedIndex = destIndex;
-            let steps = (clickedIndex - currentIndex + DESTINATIONS.length) % DESTINATIONS.length;
-            if (steps > 0) {
-              moveNext();
-            }
+            if (isTransitioning) return;
+            moveNext();
           }
         });
         
@@ -819,8 +812,6 @@
         bgTemp.classList.remove("active");
         
         currentIndex = nextIndex;
-        initCarousel();
-        
         isTransitioning = false;
       }, 600);
     }
@@ -833,23 +824,26 @@
       const prevIndex = (currentIndex - 1 + DESTINATIONS.length) % DESTINATIONS.length;
       const prevData = DESTINATIONS[prevIndex];
       
-      currentIndex = prevIndex;
-      initCarousel();
+      const lastCard = track.lastElementChild;
+      if (lastCard) {
+        // Prepend it to the track DOM
+        track.insertBefore(lastCard, track.firstElementChild);
+        
+        // Add expanding class to make it visually scale up
+        lastCard.classList.add("expanding");
+      }
       
       const cardWidth = window.innerWidth < 768 ? 150 : 200;
       const gap = window.innerWidth < 768 ? 16 : 24;
       const shiftX = -(cardWidth + gap);
       
+      // Instantly position track to the left so there is no visual jump when we prepended the card
       track.style.transition = "none";
       track.style.transform = `translateX(${shiftX}px)`;
       
-      const firstCard = track.firstElementChild;
-      if (firstCard) {
-        firstCard.classList.add("expanding");
-      }
-      
       track.offsetHeight; // force reflow
       
+      // Transition track back to translateX(0)
       track.style.transition = "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)";
       track.style.transform = "translateX(0)";
       
@@ -872,8 +866,8 @@
       }
       
       setTimeout(() => {
-        if (firstCard) {
-          firstCard.classList.remove("expanding");
+        if (lastCard) {
+          lastCard.classList.remove("expanding");
         }
       }, 50);
       
@@ -892,6 +886,8 @@
       setTimeout(() => {
         bgActive.src = prevData.image;
         bgTemp.classList.remove("active");
+        
+        currentIndex = prevIndex;
         isTransitioning = false;
       }, 600);
     }
