@@ -119,7 +119,7 @@ body::before {
   width: 100%;
   height: 100vh;
   z-index: -9;
-  background-image: url('images/bg-image.png');
+  background-image: url('images/bg-image.jpg');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -1249,7 +1249,7 @@ p, span, li, a, button, label, input, textarea {
 
 .hero-home-title {
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(28px, 5.5vw, 64px);
+  font-size: clamp(24px, 4.2vw, 48px);
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -0.03em;
@@ -1265,14 +1265,14 @@ p, span, li, a, button, label, input, textarea {
     padding: 32px 16px !important;
   }
   .hero-home-title {
-    font-size: clamp(20px, 4.8vw, 36px) !important;
+    font-size: clamp(18px, 4vw, 30px) !important;
     line-height: 1.25 !important;
   }
 }
 
 @media (max-width: 480px) {
   .hero-home-title {
-    font-size: clamp(16px, 4.5vw, 24px) !important;
+    font-size: clamp(14px, 3.8vw, 20px) !important;
     line-height: 1.3 !important;
     letter-spacing: -0.02em !important;
     max-width: 100%;
