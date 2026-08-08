@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <h2 class="display-lg-mobile text-snow-peak font-bold">Request Submitted!</h2>
             <p class="body-md text-muted" style="max-width: 500px; margin: 0 auto; color: rgba(255,255,255,0.7) !important;">
-              Thank you for choosing Me Time We Time. Our travel planners are already working on your custom Northern Pakistan itinerary. We will contact you via email or phone within the next 24 hours.
+              Thank you for choosing <span class="text-sunset-accent">Me Time We Time</span>. Our travel planners are already working on your custom Northern Pakistan itinerary. We will contact you via email or phone within the next 24 hours.
             </p>
             <a href="index.html" class="btn btn-secondary mt-6" style="text-decoration: none;">Return Home</a>
           </div>
